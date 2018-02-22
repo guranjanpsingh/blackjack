@@ -3,13 +3,14 @@ class Dealer:
     Dealer of the game
     """
 
-    __hand = []
+    hand = []
 
     def getVisibleCard(self):
         """
         :return: the top card of the dealer
         """
-        return self.__hand[1]
+        return self.hand[1]
+
 
     def __init__(self):
         """

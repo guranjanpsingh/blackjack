@@ -1,5 +1,9 @@
-from .Player import Player
-
+import Player
+import CardBank
+import Dealer
+import Suit
+import Card
+import helpers
 
 class BlackJack:
 
@@ -9,6 +13,7 @@ class BlackJack:
 
     players = []
     cardBank = None
+    dealer = Dealer.Dealer()
 
     def deal(self):
         """
@@ -21,8 +26,13 @@ class BlackJack:
         """
         single round of the game
         """
+        while self.cardBank.cardsAvailable():
+            self.__InitialDeal()
+            self.__IntermediateCheck()
+            self.__ContinuePlay()
+            self.__cleanUp()
 
-        pass
+
 
 
     def __init__(self, playerCount, deckCount):
@@ -31,7 +41,10 @@ class BlackJack:
         :param playerCount: number of players in the game
         :param deckCount: number of decks to use
         """
-        players = [Player] * playerCount
+        for i in range(playerCount):
+            player = Player.Player(100, i + 1)
+            self.players.append(player)
+        self.cardBank = CardBank.CardBank(deckCount)
 
 
     def __InitialDeal(self):
@@ -39,14 +52,28 @@ class BlackJack:
         Deal the first round of cards to all players and the Dealer
         :return:
         """
-        pass
+
+        for player in self.players:
+            card = self.cardBank.nextCard()
+            player.hands[0].append(card)
+
+        dealerCard = self.cardBank.nextCard()
+        self.dealer.hand.append(dealerCard)
+        for player in self.players:
+            card = self.cardBank.nextCard()
+            player.hands[0].append(card)
 
     def __IntermediateCheck(self):
         """
         Check for payouts, blackjacks etc before continuing the play
         :return:
         """
-        pass
+        for player in self.players:
+            hand = player.hands[0]
+            if helpers.isBlackJack(hand):
+                player.balance += player.bet * 1.5
+
+
 
     def __ContinuePlay(self):
         """
@@ -54,3 +81,14 @@ class BlackJack:
         :return:
         """
         pass
+
+
+    def __cleanUp(self):
+        """
+        Clean up the board after each play
+        :return:
+        """
+
+        for player in self.players:
+            player.resetHand()
+

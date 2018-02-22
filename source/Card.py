@@ -16,3 +16,13 @@ class Card:
         self.suit = suit
         self.value = value
 
+
+    def __str__(self):
+        cardName = str(self.value)
+        if cardName == "11":
+            cardName = "Jack"
+        elif cardName == "12":
+            cardName = "Queen"
+        elif cardName == "13":
+            cardName = "King"
+        return cardName + " of " + str(self.suit)
