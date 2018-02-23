@@ -57,21 +57,30 @@ class BlackJack:
             card = self.cardBank.nextCard()
             player.hands[0].append(card)
 
-        dealerCard = self.cardBank.nextCard()
-        self.dealer.hand.append(dealerCard)
+        self.dealer.hand.append(self.cardBank.nextCard())
         for player in self.players:
             card = self.cardBank.nextCard()
             player.hands[0].append(card)
+
+        self.dealer.hand.append(self.cardBank.nextCard())
 
     def __IntermediateCheck(self):
         """
         Check for payouts, blackjacks etc before continuing the play
         :return:
         """
+        #TODO: payout the side bet of lucky lucky
+        self.__payoutSideBet()
+
+        # payout black jacks
         for player in self.players:
             hand = player.hands[0]
             if helpers.isBlackJack(hand):
                 player.balance += player.bet * 1.5
+                print("Player " + str(player.id) + " got a black jack.")
+                print("Balance: " + str(player.balance))
+
+
 
 
 
@@ -80,7 +89,28 @@ class BlackJack:
         continute the play for all players until the end of round
         :return:
         """
-        pass
+        for player in self.players:
+            for hand in player.hands:
+                while True and not helpers.isBlackJack(hand):
+                    decision = player.decide(self.dealer.hand[1], hand) # 1 is the top card of dealer
+                    print("Player " + str(player.id))
+                    helpers.printHand(hand)
+                    print("Dealer card: " + str(self.dealer.hand[1]))
+                    print("Player decided to: " + str(decision))
+                    print("")
+                    if not self.validDecision(player, decision):
+                        print("Not a valid choice.")
+                        continue
+                    if decision == decision.Stand:
+                        break
+                    elif decision == decision.Hit:
+                        hand.append(self.cardBank.nextCard())
+                        break
+                    elif decision == decision.Double:
+                        hand.append(self.cardBank.nextCard())
+                        break  # only one card given for double
+                    else:
+                        break
 
 
     def __cleanUp(self):
@@ -91,4 +121,34 @@ class BlackJack:
 
         for player in self.players:
             player.resetHand()
+        self.dealer.hand = []
+
+
+    def __payoutSideBet(self):
+        """
+        Pay out side bet of lucky lucky
+        Using the players 2 cards and dealers top card
+        Payouts:
+        18 or less loss
+        19, 20: 2 to 1
+        21: 3 to 1
+        21 (Suited): 15 to 1
+        6,7,8: 30 to 1
+        7,7,7: 50 to 1
+        6,7,8 (Suited): 100 to 1
+        7,7,7 (Suited): 200 to 1
+        :return:
+        """
+        pass
+
+    def validDecision(self, player, decision):
+        """
+        Make sure the player can make they decision
+        :param player:
+        :param decision:
+        :return:
+        """
+
+        return True
+
 

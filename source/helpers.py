@@ -29,7 +29,7 @@ def translateNumberFromCard(card):
         number = number * 4
 
     number = number + card.value
-    return number
+    return max(10, number)
 
 def handSum(hand):
     sum = 0
@@ -40,10 +40,23 @@ def handSum(hand):
 def isBlackJack(hand):
     sum = handSum(hand)
     if sum == 11:
-        print(sum)
         for card in hand:
             if card.value == 1:
                 return True
 
     return False
+
+
+def hand_contains_ace(hand):
+    for card in hand:
+        if card.value == 1:
+            return True
+
+def printHand(hand):
+    printString = "Hand "
+    for card in hand:
+        printString += card.__str__() + ", "
+
+    print(printString)
+
 
