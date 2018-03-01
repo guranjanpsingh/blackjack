@@ -1,5 +1,6 @@
 from Card import Card
 from Suit import Suit
+import sys, os
 
 def translateCardFromNumber(number):
     cardNumber = (number % 13) + 1
@@ -59,4 +60,8 @@ def printHand(hand):
 
     print(printString)
 
+def enablePrint():
+    sys.stdout = sys.__stdout__
 
+def disabledPrint():
+    sys.stdout = open(os.devnull, 'w')

@@ -4,7 +4,7 @@ class Dealer:
     """
 
     hand = []
-
+    winCount = 0
     def getVisibleCard(self):
         """
         :return: the top card of the dealer
